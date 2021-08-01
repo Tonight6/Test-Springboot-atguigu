@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--基于属性的 -->
+<!-- 游客身份-->
+<h1 shiro:guest="true">
+    游客登陆
+</h1>
+<!--基于标签的 -->
+<!-- 已认证的-->
+<shiro:authenticated>
+    <h1>用户登录</h1>
+</shiro:authenticated>
+
+<shiro:hasRole:admin>
+    <h1>拥有admin权限的用户登录</h1>
+</shiro:hasRole:admin>
+
+<br>
+
+<!-- 用户已经身份验证/记住我登录后显示相应的信息。-->
+<shiro:user>
+    user标签
+</shiro:user>
+
+<br>
+<!--<shiro:notAuthenticated>-->
+<!--    <h1>未进行身份验证</h1>-->
+<!--</shiro:notAuthenticated>-->
+<h1><shiro:principal /></h1>
+
+
+<br>
+<a href="/logout">登出</a><br><br><br>
+
+<a th:href="@{|/admin/test|}">需要有admin角色的功能</a><br>
+<a th:href="@{|/admin/test01|}">需要有admin角色的功能test01</a><br>
+<a th:href="@{|/admin/add|}">需要有admin角色的功能add</a><br>
+<a th:href="@{|/user/test|}">需要有user角色的功能</a><br>
+<a th:href="@{|/user/test01|}">需要有user角色的功能test01</a><br>
+
+
+</body>
+</html>

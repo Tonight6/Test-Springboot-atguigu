@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.springboot_easycode.dao.TblUserDao">
+
+    <resultMap id="BaseResultMap" type="com.springboot.springboot_easycode.entity.TblUser">
+        <!--@Table tbl_user-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+        <result property="userAge" column="user_age" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, user_name, user_password, user_age
+        from test.tbl_user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, user_name, user_password, user_age
+        from test.tbl_user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, user_name, user_password, user_age
+        from test.tbl_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                and user_password = #{userPassword}
+            </if>
+            <if test="userAge != null">
+                and user_age = #{userAge}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into test.tbl_user(user_name, user_password, user_age)
+        values (#{userName}, #{userPassword}, #{userAge})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update test.tbl_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                user_password = #{userPassword},
+            </if>
+            <if test="userAge != null">
+                user_age = #{userAge},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from test.tbl_user where id = #{id}
+    </delete>
+
+</mapper>

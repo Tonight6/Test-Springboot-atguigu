@@ -1,0 +1,79 @@
+
+#数据库连接配置
+spring:
+  # reids配置
+  redis:
+    database: 0
+    host: 192.168.111.129
+    port: 6379
+    password:
+    timeout: 10000
+    # redis连接池配置
+    pool:
+      # 最大可用连接数（默认为8，负数表示无限）
+      max-active: 8
+      # 最大空闲连接数（默认为8，负数表示无限）
+      max-idle: 8
+      # 最小空闲连接数（默认为0，该值只有为正数才有用）
+      min-idle: 0
+      # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+      max-wait: -1
+  # 数据源配置
+  datasource:
+    #用户名
+    username: "root2"
+    #密码
+    password: "010607"
+    # url需要指定时区serverTimezone为 GMT%2B8 ：北京时间东八区
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    # 新版的驱动类改成了com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+  #配置thymeleaf渲染视图
+  thymeleaf:
+    # prefix: classpath:/templates/views/
+    suffix: .html
+    enabled: true
+    cache: false  # 关闭缓存
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  #修改json返回时间类型数据的格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+
+
+#mybatis-plus:
+#  mapper-locations:
+#    - classpath:Mapper/*Mapper.xml
+#springboot+mybatis-plus 两种方式打印sql语句
+#  configuration:
+#        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  global-config:8
+#    db-config:
+#      id-type: auto
+#    banner: true
+
+# 分页配置
+#pagehelper:
+#  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params: count=countSql
+
+#  使用mybatis配置文件时需要指明
+mybatis:
+  # 指定sql映射文件位置
+  mapper-locations:  classpath:Mapper/*.xml
+
+
+server:
+  #端口设置
+  port: 8080
+  servlet:
+    session:
+      #session超时时间设置：2小时 7200秒
+      timeout: PT2H
