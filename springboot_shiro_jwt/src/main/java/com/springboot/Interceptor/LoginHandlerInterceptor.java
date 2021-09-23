@@ -28,7 +28,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
             return true;
         }else {
             //未登陆，返回登陆页面
-            request.setAttribute("msg","没有权限请先登陆");
+            System.out.println("返回首页");
             response.sendRedirect("/index.html");
             return false;
         }

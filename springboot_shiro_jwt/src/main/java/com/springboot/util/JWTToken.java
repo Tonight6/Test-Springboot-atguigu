@@ -1,4 +1,4 @@
-package com.springboot;
+package com.springboot.util;
 
 import org.apache.shiro.authc.AuthenticationToken;
 

@@ -1,12 +1,8 @@
 package com.springboot.Fileter;
 
 
-import com.springboot.JWTToken;
-import com.springboot.config.CustomRealm;
+import com.springboot.util.JWTToken;
 import com.springboot.util.JWTUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
@@ -41,13 +37,15 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Autowired
     private JWTUtil jwtUtil;
 
-    /**
-     * 如果带有 token，则对 token 进行检查，否则直接通过    为true执行isLoginAttempt（）
-     */
+//    /**
+//     * 如果带有 token，则对 token 进行检查，否则直接通过    为true执行isLoginAttempt（）
+
+         // 父类的父类还是调用了isLoginAttempt() 判断
+//     */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws UnauthorizedException {
         //判断请求的请求头是否带上 "token"
-        System.out.println("判断请求的请求头是否带上token");
+        System.out.println("isAccessAllowed===========");
         if (isLoginAttempt(request, response)) {
             //如果存在，则进入 executeLogin 方法执行登入，检查 token 是否正确
             try {
@@ -55,6 +53,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
                 return true;
             } catch (Exception e) {
                 //token 错误
+                request.setAttribute("msg",e.getMessage());
                 responseError(response, e.getMessage());
             }
         }

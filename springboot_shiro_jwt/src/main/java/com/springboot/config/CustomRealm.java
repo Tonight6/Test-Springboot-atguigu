@@ -1,8 +1,9 @@
 package com.springboot.config;
 
-import com.springboot.JWTToken;
+import com.springboot.util.JWTToken;
 import com.springboot.Service.UserService;
 import com.springboot.util.JWTUtil;
+import com.springboot.util.RedisUtil;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -10,12 +11,8 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -38,12 +35,15 @@ public class CustomRealm extends AuthorizingRealm {
     @Autowired
     private JWTUtil jwtUtil;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     /**
      * 必须重写此方法，不然会报错
      */
     @Override
     public boolean supports(AuthenticationToken token) {
-        return true;
+        return token instanceof JWTToken;
     }
 
     /**
@@ -59,13 +59,14 @@ public class CustomRealm extends AuthorizingRealm {
         String token = (String) authenticationToken.getCredentials();
         // 解密获得username，用于和数据库进行对比
         String username = jwtUtil.getUsername(token);
-        if (username == null || !jwtUtil.verify(token, username)) {
+        if (username == null || !jwtUtil.isTokenExpired(token)) {
             throw new AuthenticationException("token认证失败！");
         }
-//
-//        if(username == null){
-//            return  null;
-//        }
+        //TODO 验证token是否过期
+
+        // 存入redis 时间为60s
+        //redisUtil.expire(token, 60);
+
         //SimpleAuthenticationInfo 验证密码    authenticationToken.getPrincipal().toString()
         //第一个参数是userName或者user对象。返回给subject.login(token);方法的参数
         //第二个参数从数据库中获取的password
@@ -116,9 +117,6 @@ public class CustomRealm extends AuthorizingRealm {
         info.setRoles(roleSet);
         info.setStringPermissions(permissionSet);
         return info;
-
-
-
 
     }
 

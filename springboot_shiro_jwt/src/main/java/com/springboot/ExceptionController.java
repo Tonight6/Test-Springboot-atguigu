@@ -1,6 +1,7 @@
 package com.springboot;
 
 import com.springboot.util.Msg;
+
 import org.apache.shiro.ShiroException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,8 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionController {
     // 捕捉shiro的异常
     @ExceptionHandler(ShiroException.class)
-    public Msg handle401() {
-        return Msg.noPermission().add("info","您没有权限访问！");
+    public Msg handle401(ShiroException e) {
+        String message = e.getMessage();
+        return Msg.fail().add("msg", "ShiroException！！！" + message);
     }
 
     // 捕捉其他所有异常
